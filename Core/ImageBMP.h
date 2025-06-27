@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cstdint>
 
 #include "../utils/Vec2.hpp"
 #include "../utils/Radix.h"
