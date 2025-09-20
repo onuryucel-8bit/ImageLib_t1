@@ -9,9 +9,10 @@
 #include <string>
 #include <cstdint>
 
-#include "../utils/Vec2.hpp"
-#include "../utils/Radix.h"
-#include "../utils/tabulate/tabulate.hpp"
+#include "../../libsLocal/Vec2.hpp"
+#include "../../libsLocal/utils/Radix.h"
+
+using vec32bit = sml::Vector2<uint32_t>;
 
 //#define DEBUG_PRINT_BMP_ALL
 
@@ -27,9 +28,6 @@
 	#define DEBUG_PRINT_CREATE_HEADER_SIZE
 #endif // DEBUG_PRINT_BMP_ALL
 
-//for holding image x = width and y = height
-using vec32bit = sml::Vector2<uint32_t>;
-
 //14 bytes 112 bits
 #pragma pack(push, 1)
 typedef struct BMP_Header
@@ -39,7 +37,7 @@ typedef struct BMP_Header
 
 	//4byte wiki => app specific
 	uint32_t reservedBytes = 0;//4byte
-	
+
 	//Offset from beginning of file to the beginning of the bitmap data
 	uint32_t pixelDataOffset = 0; //4byte start point of the image data
 
@@ -107,21 +105,23 @@ struct Color
 
 };
 
-
-
 class ImageBMP
 {
 public:
 	ImageBMP();
 	~ImageBMP();
 
+	//loads bmp file to vector<char>
 	void load(std::string path);
+
+
 	void create(std::string fileName, vec32bit size, std::vector<Color>& pixels);
 	void createStandart(std::string fileName, vec32bit size);
 	void save();
 
 	void rotate(int base, float radian);
 
+	std::vector<char> getData();
 	std::vector<uint8_t> getSubPart(vec32bit pos, vec32bit size);
 	void setSubPart(vec32bit pos, vec32bit size, std::vector<uint8_t>& data);
 
@@ -129,7 +129,7 @@ public:
 	Color getPixel(vec32bit pos);
 
 	void DEBUG_printRawData();
-	void DEBUG_printDataTable();
+	
 
 private:
 	std::vector<char> m_buffer;
