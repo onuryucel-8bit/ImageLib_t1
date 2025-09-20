@@ -71,35 +71,6 @@ void ImageBMP::load(std::string path)
 
 	image.close();
 
-	//DEBUG_printRawData();
-	DEBUG_printDataTable();
-
-#ifdef DEBUG_PRINT_BUFFER_SIZE
-	std::cout << "m_buffer.size(): " << m_buffer.size() << ": width * height: " << infoHeader.width * infoHeader.height << "\n";
-#endif // DEBUG_PRINT_BUFFER_SIZE
-
-#ifdef DEBUG_PRINT_BMPinfoHeader
-	std::cout << "------------------------------------\n"
-		<< "DEBUG_PRINT BmpInfoHeader\n"
-		<< "width " << infoHeader.width << "\n"
-		<< "height " << infoHeader.height << "\n"
-		<< "colorUsed " << infoHeader.colorsUsed << "\n"
-		<< "------------------------------------\n";
-
-
-#endif // DEBUG_PRINT_BMP_INFO_HEADER
-
-#ifdef DEBUG_PRINT_BMPheader
-
-	std::cout << "------------------------------------\n"
-		<< "DEBUG_PRINT BmpHeader: \n"
-		<< "signature :" << header.bitmapSignature_Bytes << "\n"
-		<< "fileSize :" << header.FileSize << "\n"
-		<< "reserved 0 :" << header.reservedBytes_0 << "\n"
-		<< "reserved 1:" << header.reservedBytes_1 << "\n"
-		<< "pixelDataOffset :" << header.pixelDataOffset << "\n"
-		<< "------------------------------------\n";
-#endif // DEBUG_PRINT_BMP_HEADER
 
 }
 
@@ -165,14 +136,6 @@ void ImageBMP::create(std::string fileName, vec32bit size, std::vector<Color>& p
 	std::cout << "TEST pixels size = " << pixels.size() << " pixels.size() * sizeof Color = " << pixels.size() * sizeof(Color) << "\n";
 
 	file.close();
-
-
-#ifdef DEBUG_PRINT_CREATE_HEADER_SIZE
-	std::cout << "-----Size of headers-----\n"
-		<< "sizeof infoheader " << std::hex << sizeof(infoHeader) << "\n"
-		<< "sizeof header " << sizeof(header) << "\n"
-		<< "--------------------------------\n";
-#endif // DEBUG_PRINT_CREATE_HEADER_SIZE
 }
 
 void ImageBMP::createStandart(std::string fileName, vec32bit size)
@@ -210,37 +173,6 @@ void ImageBMP::DEBUG_printRawData()
 
 }
 
-void ImageBMP::DEBUG_printDataTable()
-{
-	tabulate::Table table;
-
-	std::vector<std::string> row;
-	for (size_t i = 0; i < m_width * 3; ++i)
-	{
-		row.push_back(std::to_string(i));
-	}
-	table.add_row(tabulate::Table::Row_t(row.begin(), row.end()));
-
-
-	row.clear();
-
-	size_t rowCounter = 0;
-	for (char val : m_buffer) {
-		row.push_back(rdx::dec_toHex(val & 0xff));
-		rowCounter++;
-
-		if (rowCounter >= m_width * 3)
-		{
-			table.add_row(tabulate::Table::Row_t(row.begin(), row.end()));
-			row.clear();
-			rowCounter = 0;
-		}
-
-	}
-
-	std::cout << table << std::endl;
-}
-
 #pragma region TODO_utils
 
 void ImageBMP::save()
@@ -250,6 +182,11 @@ void ImageBMP::save()
 void ImageBMP::rotate(int base, float radian)
 {
 
+}
+
+std::vector<char> ImageBMP::getData()
+{
+	return m_buffer;
 }
 
 std::vector<uint8_t> ImageBMP::getSubPart(vec32bit pos, vec32bit size)
